@@ -3,7 +3,7 @@ name: release workflow
 on: [workflow_dispatch]
 
 jobs:
-  run-shell-command:
+   run-shell-command:
     permissions:
       contents: write
       issues: write
