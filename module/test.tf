@@ -1,6 +1,6 @@
 #s3 bucket for backend
 resource "aws_s3_bucket" "backend" {
-  bucket = lower("job-${var.env["dept1"]}-${random_integer.backend.result}")
+  bucket = lower("job-${var.env}-${random_integer.backend.result}")
 
   tags = {
     Name        = "backend"
@@ -30,7 +30,7 @@ resource "random_integer" "backend" {
   max = 500
   keepers = {
     # Generate a new integer each time we switch to a new listener ARN
-    Environment = var.env["dept1"]
+    Environment = var.env
   }
 }
 
