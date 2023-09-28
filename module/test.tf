@@ -1,6 +1,6 @@
 #s3 bucket for backend
 resource "aws_s3_bucket" "backend" {
-  bucket = lower("job-${var.env}-${random_integer.backend.result}")
+  bucket = lower("job-${"var.env"}-${random_integer.backend.result}")
 
   tags = {
     Name        = "backend"
