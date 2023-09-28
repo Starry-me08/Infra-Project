@@ -30,7 +30,7 @@ resource "random_integer" "backend" {
   max = 500
   keepers = {
     # Generate a new integer each time we switch to a new listener ARN
-    Environment = var.env
+    Environment = "var.env"
   }
 }
 
