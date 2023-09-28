@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "backend" {
 
   tags = {
     Name        = "backend"
-    Environment = "Dev"
+    Environment = "dev"
   }
 }
 
