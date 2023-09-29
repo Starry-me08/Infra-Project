@@ -1,19 +1,41 @@
-/*
+# Create Security Group - App Traffic
+resource "aws_security_group" "app" {
+  name        = "app"
+  description = "app-sg"
+  vpc_id      = data.terraform_remote_state.network.outputs.vpc_id
+
+  ingress {
+    description     = "Allow traffic from web-subnet"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.web.id]
+    #cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    description = "Allow all ip and ports outbound"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 #create a security group for RDS Database Instance
 resource "aws_security_group" "rds_sg" {
   name   = "rds_sg"
-  vpc_id = module.vpc.vpc_id
+  vpc_id = data.terraform_remote_state.network.outputs.vpc_id
   ingress {
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
-    security_groups = [aws_security_group.web.id]
+    security_groups = [aws_security_group.app.id]
   }
   egress {
     from_port       = 32768
     to_port         = 65535
     protocol        = "tcp"
-    security_groups = [aws_security_group.web.id]
+    security_groups = [aws_security_group.app.id]
   }
 }
 
@@ -21,7 +43,7 @@ resource "aws_security_group" "rds_sg" {
 resource "aws_security_group" "ssh" {
   name        = "vpc-ssh"
   description = "VPC SSH"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = data.terraform_remote_state.network.outputs.vpc_id
 
   ingress {
     description = "Allow Port 22"
@@ -43,7 +65,7 @@ resource "aws_security_group" "ssh" {
 resource "aws_security_group" "web" {
   name        = "vpc-web"
   description = "Dev VPC web"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = data.terraform_remote_state.network.outputs.vpc_id
   ingress {
     description = "Allow Port 80"
     from_port   = 80
@@ -69,4 +91,3 @@ resource "aws_security_group" "web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-*/
